@@ -13,7 +13,7 @@ def make_cutomer_id():
 
     #untuk fromat customer_id
     id_str = str(id)
-    while len(id_str)<4:
+    while len(id_str)<5:
         id_str = '0' + id_str
     return f"MYSPA{id_str}"
 
@@ -24,6 +24,13 @@ def is_valid_email(email):
 #fungsi untuk validasi no hp
 def is_valid_nohp(no_hp):
     return len(no_hp)<=12 and no_hp.isdigit()
+
+def is_valid_date(birthday):
+    try:
+        datetime.strptime(birthday, '%d-%m-%Y')
+        return True
+    except ValueError:
+        return False
 
 #fungsi kalkulasi umur dari birthday
 def hitung_usia(birthday):
@@ -43,7 +50,6 @@ def hitung_usia(birthday):
     return temp_usia
 
 
-
 #fungsi untuk menambahkan data customer
 def create_data_customer(nama,no_hp,email,birthday):
     #menyimpan umur
@@ -55,10 +61,10 @@ def create_data_customer(nama,no_hp,email,birthday):
     #dictionary customer untuk menyimpan data customer
     customer = {
         'customer_id': customer_id,
-        'nama': nama.capitalize(),
+        'nama': nama,
         'usia': usia,
         'no_hp': no_hp,
-        'email': email.lower(),
+        'email': email,
         'birthday' : birthday
     }
     customers.append(customer)
@@ -69,7 +75,7 @@ def read_data_customer():
         print('Tidak ada data customer di database. Silahkan masukkan data terlebih dahulu.')
     else:
         headers = ["Customer ID", "Nama","Usia", "Nomor HP", "Email", "Birthday"]
-        table = [[c['customer_id'], c['nama'], c['usia'], c['no_hp'], c['email'], c['birthday']] for c in customers]
+        table = [[c['customer_id'], c['nama'].upper(), c['usia'], c['no_hp'], c['email'].lower(), c['birthday']] for c in customers]
         print(tabulate(table, headers, tablefmt="grid"))
 
 #fungsi hapus data customer berdasrkan ID
@@ -82,15 +88,60 @@ def delete_customer(customer_id):
                 konfirmasi = input(f"Apa kamu yakin akan menghapus data customer {customer_name}, ID: {customer_id.upper()}? (y/n):")
                 if konfirmasi.lower() == 'y':
                     customers.remove(customer)
-                    print(f"Customer {customer_name}, ID: {customer_id.upper()} deleted successfully!")
+                    print(f"Customer {customer_name.upper()}, ID: {customer_id.upper()} berhasil dihapus!")
                     break
                 elif konfirmasi.lower() == 'n' :
-                    print("prose hapus data dibatalkan")
+                    print("proses hapus data dibatalkan")
                     break
                 else:
                     print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
             return
-    print(f"Customer with ID {customer_id.upper()} not found.")
+    print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
+
+#fungsi update data customer
+def update_customer(customer_id, nama=None, no_hp=None, email=None, birthday=None):
+    for customer in customers:
+        if customer['customer_id'] == customer_id:
+            original_data = customer.copy()
+
+            if nama: 
+                customer['nama'] = nama
+            if no_hp: 
+                if is_valid_nohp(no_hp):
+                    customer['no_hp'] = no_hp
+                else:
+                    print("Nomor HP tidak valid. Perubahan untuk nomor HP dibatalkan.")
+            if email:
+                if is_valid_email(email):
+                    customer['email'] = email
+                else:
+                    print("Format email tidak valid. Perubahan untuk email dibatalkan.")
+            if birthday:  
+                if is_valid_date(birthday):
+                    customer['birthday'] = birthday
+                    customer['usia'] = hitung_usia(birthday)
+                else:
+                    print("Format tanggal lahir tidak valid. Perubahan untuk tanggal lahir dibatalkan.")
+
+            print("Data yang akan diperbarui:")
+            print("========================================")
+            print(f"Nama: {customer['nama'].upper()}")
+            print(f"Nomor HP: {customer['no_hp']}")
+            print(f"Email: {customer['email'].lower()}")
+            print(f"Birthday: {customer['birthday']}")
+            
+            while True:
+                konfirmasi = input("Apakah Anda yakin ingin menyimpan perubahan ini? (y/n): ")
+                if konfirmasi.lower() == 'y':
+                    print(f"Customer {customer['nama'].upper()}, ID: {customer_id.upper()} berhasil diperbarui!")
+                    break
+                elif konfirmasi.lower() == 'n':
+                    customer.update(original_data)
+                    print("Perubahan dibatalkan. Data tidak diperbarui.")
+                    break
+                else:
+                    print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
+
 
 
 #fungsi data dummy
@@ -112,7 +163,7 @@ def main_menu():
     #disini untuk isi data dummy
     add_dummy_data()
     while True:
-        print('MySPA CRM System')
+        print('\nMySPA CRM System')
         print('1. Lihat Semua Data Customer')
         print('2. Tambah Customer Baru')
         print('3. Update Data Customer')
@@ -141,12 +192,70 @@ def main_menu():
                         break
                     else:
                         print("Format email tidak valid. Silakan masukkan email yang benar.")
-                
-                birtday = input('Masukkan TTL (DD-MM-YYYY): ')
-                create_data_customer(nama,no_hp,email,birtday)
-                print(f'Data pelanggan {nama.capitalize()} berhasil ditambahkan.')
+
+                while True:
+                    birthday = input('Masukkan TTL (DD-MM-YYYY): ')
+                    if is_valid_date(birthday):
+                        break
+                    else:
+                        print("Format tanggal lahir tidak valid. Format Tgl-Bln-Thn.")
+
+                print("======================================================")
+                while True:
+                    konfirmasi = input("Apakah Anda yakin ingin menyimpan data ini? (y/n): ")
+                    if konfirmasi.lower() == 'y':
+                        create_data_customer(nama,no_hp,email,birthday)
+
+                        last_customer = customers[-1]
+
+                        headers = ["Customer ID", "Nama", "Usia", "Nomor HP", "Email", "Birthday"]
+                        table = [[
+                            last_customer['customer_id'],
+                            last_customer['nama'].upper(),
+                            last_customer['usia'],
+                            last_customer['no_hp'],
+                            last_customer['email'].lower(),
+                            last_customer['birthday']
+                        ]]
+
+                        print("======================================================")
+                        print(f'Data pelanggan {nama.upper()} berhasil ditambahkan.')
+                        print(tabulate(table, headers, tablefmt="grid"))
+                        break
+                    elif konfirmasi.lower() == 'n':
+                        print("\nData tidak disimpan. Proses dibatalkan.")
+                        break
+                    else:
+                        print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
+
+
             elif  pilih_menu == '3':
-                print('Update data')
+                customer_id = input("Masukkan ID customer untuk update: ").upper()
+
+                for customer in customers:
+                    if customer['customer_id'] == customer_id:
+                        print("\nDetail Customer Sebelum Diperbarui:")
+                        headers = ["Customer ID", "Nama","Usia", "Email", "Nomor HP", "Birthday"]
+                        current_details = [
+                            customer['customer_id'],
+                            customer['nama'].upper(),
+                            hitung_usia(customer['birthday']),
+                            customer['email'].lower(),
+                            customer['no_hp'],
+                            customer['birthday']
+                        ]
+                        print(tabulate([current_details], headers=headers, tablefmt="grid"))
+                        break
+                else:
+                    print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
+                    continue
+
+                print("Kosongkan field jika kamu tidak ingin memperbarui informasi")
+                nama = input("Masukkan nama baru (atau kosongkan): ")
+                no_hp = input('Masukkan no hp baru (atau kosongkan): ')
+                email = input('Masukkan email baru (atau kosongkan): ')
+                birthday = input("Masukkan tanggal lahir (DD-MM-YYYY atau kosongkan): ")
+                update_customer(customer_id, nama if nama else None, no_hp if no_hp else None, email if email else None, birthday if birthday else None)
             elif  pilih_menu == '4':
                 customer_id = input("Masukkan ID Customer (hapus berdasarkan ID): ")
                 delete_customer(customer_id)
@@ -156,6 +265,6 @@ def main_menu():
             else :
                 print('Pilihan tidak ada dalam menu. Coba lagi.')
         except Exception as e:
-            print(f"An error occurred: {e}") #ada error dari sistem
+            print(f"An error occurred: {e}") #ada pemebritahuan error dari sistem
 
 main_menu()
