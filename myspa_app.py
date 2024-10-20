@@ -55,10 +55,10 @@ def create_data_customer(nama,no_hp,email,birthday):
     #dictionary customer untuk menyimpan data customer
     customer = {
         'customer_id': customer_id,
-        'nama': nama,
+        'nama': nama.capitalize(),
         'usia': usia,
         'no_hp': no_hp,
-        'email': email,
+        'email': email.lower(),
         'birthday' : birthday
     }
     customers.append(customer)
@@ -71,6 +71,27 @@ def read_data_customer():
         headers = ["Customer ID", "Nama","Usia", "Nomor HP", "Email", "Birthday"]
         table = [[c['customer_id'], c['nama'], c['usia'], c['no_hp'], c['email'], c['birthday']] for c in customers]
         print(tabulate(table, headers, tablefmt="grid"))
+
+#fungsi hapus data customer berdasrkan ID
+def delete_customer(customer_id):
+    global customers
+    for customer in customers:
+        if customer['customer_id'].upper() == customer_id.upper():
+            customer_name = customer['nama']
+            while True:
+                konfirmasi = input(f"Apa kamu yakin akan menghapus data customer {customer_name}, ID: {customer_id.upper()}? (y/n):")
+                if konfirmasi.lower() == 'y':
+                    customers.remove(customer)
+                    print(f"Customer {customer_name}, ID: {customer_id.upper()} deleted successfully!")
+                    break
+                elif konfirmasi.lower() == 'n' :
+                    print("prose hapus data dibatalkan")
+                    break
+                else:
+                    print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
+            return
+    print(f"Customer with ID {customer_id.upper()} not found.")
+
 
 #fungsi data dummy
 def add_dummy_data():
@@ -123,11 +144,12 @@ def main_menu():
                 
                 birtday = input('Masukkan TTL (DD-MM-YYYY): ')
                 create_data_customer(nama,no_hp,email,birtday)
-                print(f'Data pelanggan {nama} berhasil ditambahkan.')
+                print(f'Data pelanggan {nama.capitalize()} berhasil ditambahkan.')
             elif  pilih_menu == '3':
-                print('Menu 3')
+                print('Update data')
             elif  pilih_menu == '4':
-                print('Menu 4')
+                customer_id = input("Masukkan ID Customer (hapus berdasarkan ID): ")
+                delete_customer(customer_id)
             elif  pilih_menu == '0':
                 print('Keluar dari sistem.')
                 break
