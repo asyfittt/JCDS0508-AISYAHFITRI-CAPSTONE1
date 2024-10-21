@@ -82,7 +82,7 @@ def read_data_customer():
 def delete_customer(customer_id):
     global customers
     for customer in customers:
-        if customer['customer_id'].upper() == customer_id.upper():
+        if customer['customer_id'] == customer_id:
             customer_name = customer['nama']
             while True:
                 konfirmasi = input(f"Apa kamu yakin akan menghapus data customer {customer_name}, ID: {customer_id.upper()}? (y/n):")
@@ -161,10 +161,10 @@ def add_dummy_data():
 #fungsi main menu
 def main_menu():
     #disini untuk isi data dummy
-    add_dummy_data()
+    # add_dummy_data()
     while True:
         print('\nMySPA CRM System')
-        print('1. Lihat Semua Data Customer')
+        print('1. Lihat Data Customer')
         print('2. Tambah Customer Baru')
         print('3. Update Data Customer')
         print('4. Hapus Data Customer')
@@ -174,7 +174,44 @@ def main_menu():
 
         try:
             if pilih_menu == '1':
-                read_data_customer()
+                print("Lihat Data Customer")
+
+                while True:
+                    print("======================================================")
+                    print("1. Lihat Semua Data")
+                    print("2. Lihat data berdasarkan ID")
+                    print("0. Kembali ke main menu")
+                    pilih_submenu = input("Pilih sub menu: ")
+                    if pilih_submenu == '1':
+                        print(f"\n Semua data customer ({len(customers)} data): ") #melihat jumlah data customer
+                        read_data_customer()
+                        break
+                    elif pilih_submenu == '2':
+                        customer_id = input("Masukkan ID customer untuk update: ").upper()
+
+                        for customer in customers:
+                            if customer['customer_id'] == customer_id:
+                                print(f"\nDetail Customer dengan ID:{customer_id.upper()}")
+                                headers = ["Customer ID", "Nama","Usia", "Email", "Nomor HP", "Birthday"]
+                                current_details = [
+                                    customer['customer_id'],
+                                    customer['nama'].upper(),
+                                    hitung_usia(customer['birthday']),
+                                    customer['email'].lower(),
+                                    customer['no_hp'],
+                                    customer['birthday']
+                                ]
+                                print(tabulate([current_details], headers=headers, tablefmt="grid"))
+                                break
+                        else:
+                            print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
+                            continue
+                    elif pilih_submenu == '0':
+                        print("Kembali ke main menu")
+                        break
+                    else: 
+                        print("Invalid input")
+
             elif  pilih_menu == '2':
                 print('Silahkan masukkan data customer')
                 nama = input('Nama: ')
@@ -257,7 +294,25 @@ def main_menu():
                 birthday = input("Masukkan tanggal lahir (DD-MM-YYYY atau kosongkan): ")
                 update_customer(customer_id, nama if nama else None, no_hp if no_hp else None, email if email else None, birthday if birthday else None)
             elif  pilih_menu == '4':
-                customer_id = input("Masukkan ID Customer (hapus berdasarkan ID): ")
+                customer_id = input("Masukkan ID Customer (hapus berdasarkan ID): ").upper()
+
+                for customer in customers:
+                    if customer['customer_id'] == customer_id:
+                        print("\nData yang akan dihapus")
+                        headers = ["Customer ID", "Nama","Usia", "Email", "Nomor HP", "Birthday"]
+                        current_details = [
+                            customer['customer_id'],
+                            customer['nama'].upper(),
+                            hitung_usia(customer['birthday']),
+                            customer['email'].lower(),
+                            customer['no_hp'],
+                            customer['birthday']
+                        ]
+                        print(tabulate([current_details], headers=headers, tablefmt="grid"))
+                        break
+                else:
+                    print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
+                    continue
                 delete_customer(customer_id)
             elif  pilih_menu == '0':
                 print('Keluar dari sistem.')
