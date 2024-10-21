@@ -31,6 +31,13 @@ def is_valid_date(birthday):
         return True
     except ValueError:
         return False
+    
+def is_duplicate_customer_id(customer_id):
+    for customer in customers:
+        if customer['customer_id'] == customer_id:
+            return True
+    return False
+
 
 #fungsi kalkulasi umur dari birthday
 def hitung_usia(birthday):
@@ -51,12 +58,10 @@ def hitung_usia(birthday):
 
 
 #fungsi untuk menambahkan data customer
-def create_data_customer(nama,no_hp,email,birthday):
+def create_data_customer(customer_id,nama,no_hp,email,birthday):
+
     #menyimpan umur
     usia = hitung_usia(birthday)
-
-    #menyimpan id customer
-    customer_id = make_cutomer_id()
 
     #dictionary customer untuk menyimpan data customer
     customer = {
@@ -123,7 +128,8 @@ def update_customer(customer_id, nama=None, no_hp=None, email=None, birthday=Non
                 else:
                     print("Format tanggal lahir tidak valid. Perubahan untuk tanggal lahir dibatalkan.")
 
-            print("Data yang akan diperbarui:")
+            
+            print("\nData yang akan diperbarui:")
             print("========================================")
             print(f"Nama: {customer['nama'].upper()}")
             print(f"Nomor HP: {customer['no_hp']}")
@@ -142,26 +148,62 @@ def update_customer(customer_id, nama=None, no_hp=None, email=None, birthday=Non
                 else:
                     print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
 
+def lihat_data_id(customer_id):
+    
+    for customer in customers:
+        if customer['customer_id'] == customer_id:
+            print(f"\nDetail Customer dengan ID: {customer_id.upper()}")
+            headers = ["Customer ID", "Nama", "Usia", "Email", "Nomor HP", "Birthday"]
+            current_details = [
+                customer['customer_id'],
+                customer['nama'].upper(),
+                hitung_usia(customer['birthday']),
+                customer['email'].lower(),
+                customer['no_hp'],
+                customer['birthday']
+            ]
+            print(tabulate([current_details], headers=headers, tablefmt="grid"))
+            break
+    else:
+        print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
 
+
+def lihat_data_no_hp(no_hp):
+    for customer in customers:
+        if customer['no_hp'] == no_hp:
+            print(f"\nDetail Customer dengan Nomor HP: {no_hp}")
+            headers = ["Customer ID", "Nama", "Usia", "Email", "Nomor HP", "Birthday"]
+            current_details = [
+                customer['customer_id'],
+                customer['nama'].upper(),
+                hitung_usia(customer['birthday']),
+                customer['email'].lower(),
+                customer['no_hp'],
+                customer['birthday']
+            ]
+            print(tabulate([current_details], headers=headers, tablefmt="grid"))
+            break
+    else:
+        print(f"Customer dengan nomor hp {no_hp} tidak ditemukan.")
 
 #fungsi data dummy
 def add_dummy_data():
-    create_data_customer("Andi Saputra", "08123456789", "andi.saputra@example.com", "15-10-1990")
-    create_data_customer("Siti Aisyah", "08198765432", "siti.aisyah@example.com", "22-05-1995")
-    create_data_customer("Budi Hartono", "08212345678", "budi.hartono@example.com", "01-01-1985")
-    create_data_customer("Dewi Lestari", "08567891234", "dewi.lestari@example.com", "30-07-1992")
-    create_data_customer("Joko Susanto", "08765432109", "joko.susanto@example.com", "20-03-1988")
-    create_data_customer("Rina Maulani", "08123456780", "rina.maulani@example.com", "12-12-1993")
-    create_data_customer("Fajar Rahman", "08561234567", "fajar.rahman@example.com", "10-04-1980")
-    create_data_customer("Nina Sari", "08234567890", "nina.sari@example.com", "14-09-1991")
-    create_data_customer("Agus Prasetyo", "08987654321", "agus.prasetyo@example.com", "05-06-1987")
-    create_data_customer("Tina Wulandari", "08123456789", "tina.wulandari@example.com", "25-11-1996")
+    create_data_customer("C001", "Andi Saputra", "08223456789", "andi.saputra@example.com", "15-10-1990")
+    create_data_customer("C002", "Siti Aisyah", "08198765432", "siti.aisyah@example.com", "22-05-1995")
+    create_data_customer("C003", "Budi Hartono", "08212345678", "budi.hartono@example.com", "01-01-1985")
+    create_data_customer("C004", "Dewi Lestari", "08567891234", "dewi.lestari@example.com", "30-07-1992")
+    create_data_customer("C005", "Joko Susanto", "08765432109", "joko.susanto@example.com", "20-03-1988")
+    create_data_customer("C006", "Rina Maulani", "08123456780", "rina.maulani@example.com", "12-12-1993")
+    create_data_customer("C007", "Fajar Rahman", "08561234567", "fajar.rahman@example.com", "10-04-1980")
+    create_data_customer("C008", "Nina Sari", "08234567890", "nina.sari@example.com", "14-09-1991")
+    create_data_customer("C009", "Agus Prasetyo", "08987654321", "agus.prasetyo@example.com", "05-06-1987")
+    create_data_customer("C010", "Tina Wulandari", "08123456789", "tina.wulandari@example.com", "25-11-1996")
 
 
 #fungsi main menu
 def main_menu():
     #disini untuk isi data dummy
-    # add_dummy_data()
+    add_dummy_data()
     while True:
         print('\nMySPA CRM System')
         print('1. Lihat Data Customer')
@@ -180,6 +222,7 @@ def main_menu():
                     print("======================================================")
                     print("1. Lihat Semua Data")
                     print("2. Lihat data berdasarkan ID")
+                    print("3. Lihat data berdasarkan nama")
                     print("0. Kembali ke main menu")
                     pilih_submenu = input("Pilih sub menu: ")
                     if pilih_submenu == '1':
@@ -187,25 +230,12 @@ def main_menu():
                         read_data_customer()
                         break
                     elif pilih_submenu == '2':
-                        customer_id = input("Masukkan ID customer untuk update: ").upper()
+                        customer_id = input("Masukkan ID customer: ").upper()
+                        lihat_data_id(customer_id)
 
-                        for customer in customers:
-                            if customer['customer_id'] == customer_id:
-                                print(f"\nDetail Customer dengan ID:{customer_id.upper()}")
-                                headers = ["Customer ID", "Nama","Usia", "Email", "Nomor HP", "Birthday"]
-                                current_details = [
-                                    customer['customer_id'],
-                                    customer['nama'].upper(),
-                                    hitung_usia(customer['birthday']),
-                                    customer['email'].lower(),
-                                    customer['no_hp'],
-                                    customer['birthday']
-                                ]
-                                print(tabulate([current_details], headers=headers, tablefmt="grid"))
-                                break
-                        else:
-                            print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
-                            continue
+                    elif pilih_submenu == '3':
+                        no_hp=input('Masukkan nomor HP: ')
+                        lihat_data_no_hp(no_hp)
                     elif pilih_submenu == '0':
                         print("Kembali ke main menu")
                         break
@@ -214,6 +244,26 @@ def main_menu():
 
             elif  pilih_menu == '2':
                 print('Silahkan masukkan data customer')
+
+                while True:
+                    pilihan = input("Apakah Anda ingin membuat customer ID sendiri? (y/n): ").lower()
+
+                    if pilihan == 'y':
+                        while True:
+                            customer_id = input("Masukkan customer ID: ").upper()
+                            if is_duplicate_customer_id(customer_id):
+                                print(f"Customer ID {customer_id} sudah ada. Silahkan masukkan ID yang berbeda.")
+                            else:
+                                print(f"Customer ID being saved: {customer_id.upper()}")
+                                break
+                        break  
+                        
+                    elif pilihan == 'n':
+                        customer_id = make_cutomer_id()
+                        break
+                    else:
+                        print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
+
                 nama = input('Nama: ')
 
                 while True:
@@ -241,7 +291,7 @@ def main_menu():
                 while True:
                     konfirmasi = input("Apakah Anda yakin ingin menyimpan data ini? (y/n): ")
                     if konfirmasi.lower() == 'y':
-                        create_data_customer(nama,no_hp,email,birthday)
+                        create_data_customer(customer_id,nama,no_hp,email,birthday)
 
                         last_customer = customers[-1]
 
@@ -286,13 +336,25 @@ def main_menu():
                 else:
                     print(f"Customer dengan ID {customer_id.upper()} tidak ditemukan.")
                     continue
+                
+                while True:
+                    konfirmasi = input("Apakah Anda yakin ingin melakukan update data ini? (y/n): ")
+                    if konfirmasi.lower() == 'y':
+                        print("Kosongkan field jika kamu tidak ingin memperbarui informasi")
+                        nama = input("Masukkan nama baru (atau kosongkan): ")
+                        no_hp = input('Masukkan no hp baru (atau kosongkan): ')
+                        email = input('Masukkan email baru (atau kosongkan): ')
+                        birthday = input("Masukkan tanggal lahir (DD-MM-YYYY atau kosongkan): ")
+                        update_customer(customer_id, nama if nama else None, no_hp if no_hp else None, email if email else None, birthday if birthday else None)
+                        break
+                    elif konfirmasi.lower() == 'n':
+                        print("Perubahan dibatalkan. Data tidak diperbarui.")
+                        break
+                    else:
+                        print("Input salah. Tolong masukkan 'y' untuk yes  atau 'n' untuk no.")
+                        break
 
-                print("Kosongkan field jika kamu tidak ingin memperbarui informasi")
-                nama = input("Masukkan nama baru (atau kosongkan): ")
-                no_hp = input('Masukkan no hp baru (atau kosongkan): ')
-                email = input('Masukkan email baru (atau kosongkan): ')
-                birthday = input("Masukkan tanggal lahir (DD-MM-YYYY atau kosongkan): ")
-                update_customer(customer_id, nama if nama else None, no_hp if no_hp else None, email if email else None, birthday if birthday else None)
+                
             elif  pilih_menu == '4':
                 customer_id = input("Masukkan ID Customer (hapus berdasarkan ID): ").upper()
 
