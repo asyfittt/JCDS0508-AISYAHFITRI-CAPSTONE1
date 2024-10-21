@@ -1,52 +1,43 @@
-# Aplikasi MySPA CRM - Aplikasi Customer Relationship Management untuk SPA
+# Aplikasi MySPA CRM - Aplikasi Customer Relationship Management untuk SPA 🌸
 
 ## 📝 Deskripsi
-<p>Aplikasi MySPA CRM adalah aplikasi yang digunakan untuk manajemen data customer di SPA ABC.</p>
-
-## 👤 Target Pengguna
-<p>Pengguna aplikasi MySPA CRM meliputi bagian administrasi dan pemilik bisnis spa.</p>
+Aplikasi MySPA CRM adalah sistem manajemen hubungan pelanggan (CRM) yang dirancang untuk membantu SPA dalam mengelola data customer secara efektif. Dengan aplikasi ini, Anda dapat menambah, memperbarui, menghapus, dan melihat informasi customer dengan mudah.
 
 ## 🖥️ Teknologi yang Digunakan
-<p>Teknologi yang digunakan dalam pembuatan aplikasi ini sebagai berikut:</p>
-<ul>
-  <li>🐍 Python</li>
-  <p>Python sebagai bahasa pemrograman utama.</p>
-  <li>📊 Package Tabulate</li>
-  <p>Package yang digunakan untuk membuat tabel.</p>
-  <li>📅 Package Datetime</li>
-  <p>Package yang digunakan untuk memanipulasi dan memformat tanggal.</p>
-</ul>
+Aplikasi ini dibangun dengan teknologi berikut:
+- **🐍 Python**: Bahasa pemrograman utama yang digunakan untuk mengembangkan aplikasi ini.
+- **📊 Tabulate**: Package yang digunakan untuk menampilkan data dalam bentuk tabel yang terformat.
+- **📅 Datetime**: Package yang digunakan untuk manipulasi dan validasi tanggal.
 
 ## 🤖 Fitur
-<p>Aplikasi MySPA CRM memiliki beberapa fitur yang memudahkan kegiatan administrasi di SPA terkait dengan manajemen hubungan pelanggan, yaitu:</p>
-<ul>
-  <li>Menampilkan semua data customer.</li>
-  <li>Menampilkan data berdasarkan ID.</li>
-  <li>Menampilkan data berdasarkan Nomor HP.</li>
-  <li>Menambahkan data customer baru.</li>
-  <li>Memperbarui data customer berdasarkan ID.</li>
-  <li>Menghapus data customer berdasarkan ID.</li>
-</ul>
+Aplikasi MySPA CRM menyediakan fitur-fitur berikut:
+- Menampilkan semua data customer.
+- Menambahkan customer baru dengan validasi.
+- Memperbarui data customer yang sudah ada.
+- Menghapus data customer berdasarkan ID.
+- Melihat detail customer berdasarkan ID atau nomor HP.
 
-## 🪛 Fungsi di dalam Aplikasi
-<ul>
-  <li><strong>make_customer_id()</strong>: Menghasilkan ID customer yang unik.</li>
-  <li><strong>is_valid_email(email)</strong>: Memvalidasi format email.</li>
-  <li><strong>is_valid_nohp(no_hp)</strong>: Memvalidasi format nomor HP.</li>
-  <li><strong>is_valid_date(birthday)</strong>: Memvalidasi format tanggal lahir.</li>
-  <li><strong>hitung_usia(birthday)</strong>: Menghitung usia berdasarkan tanggal lahir.</li>
-  <li><strong>create_data_customer(customer_id, nama, no_hp, email, birthday)</strong>: Menambahkan customer baru ke database.</li>
-  <li><strong>read_data_customer()</strong>: Menampilkan semua data customer.</li>
-  <li><strong>delete_customer(customer_id)</strong>: Menghapus customer berdasarkan ID.</li>
-  <li><strong>update_customer(customer_id, nama, no_hp, email, birthday)</strong>: Memperbarui informasi customer.</li>
-  <li><strong>lihat_data_id(customer_id)</strong>: Menampilkan detail customer berdasarkan ID.</li>
-  <li><strong>lihat_data_no_hp(no_hp)</strong>: Menampilkan detail customer berdasarkan nomor HP.</li>
-  <li><strong>add_dummy_data()</strong>: Menambahkan data dummy untuk pengujian.</li>
-  <li><strong>main_menu()</strong>: Menampilkan menu utama untuk interaksi pengguna.</li>
-</ul>
+## 🔧 Fungsi Utama
+Berikut adalah beberapa fungsi penting dalam aplikasi:
+- `make_cutomer_id()`: Membuat ID customer yang unik.
+- `is_valid_email(email)`: Memvalidasi format email.
+- `is_valid_nohp(no_hp)`: Memvalidasi format nomor HP.
+- `is_valid_date(birthday)`: Memvalidasi format tanggal lahir.
+- `hitung_usia(birthday)`: Menghitung usia berdasarkan tanggal lahir.
+- `create_data_customer(...)`: Menambahkan data customer baru ke database.
+- `read_data_customer()`: Menampilkan semua data customer.
+- `delete_customer(customer_id)`: Menghapus customer berdasarkan ID.
+- `update_customer(...)`: Memperbarui informasi customer yang ada.
+- `lihat_data_id(customer_id)`: Menampilkan detail customer berdasarkan ID.
+- `lihat_data_no_hp(no_hp)`: Menampilkan detail customer berdasarkan nomor HP.
+- `add_dummy_data()`: Menambahkan data dummy untuk pengujian.
+- `main_menu()`: Menampilkan menu utama untuk interaksi pengguna.
 
-
-
-
-
-
+## 🚀 Cara Penggunaan
+1. **Instal dependencies**:
+   ```bash
+   pip install tabulate
+2. **Jalankan aplikasi:**:
+   ```bash
+   python myspa_app.py
+3. Ikuti petunjuk yang muncul di menu untuk menambah, memperbarui, atau menghapus data customer.
