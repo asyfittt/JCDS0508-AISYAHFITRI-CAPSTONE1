@@ -22,9 +22,10 @@
 <ul>
   <li>Menampilkan semua data customer.</li>
   <li>Menampilkan data berdasarkan ID.</li>
+  <li>Menampilkan data berdasarkan Nomor HP.</li>
   <li>Menambahkan data customer baru.</li>
   <li>Memperbarui data customer berdasarkan ID.</li>
-  <li>Menghapus data customer.</li>
+  <li>Menghapus data customer berdasarkan ID.</li>
 </ul>
 
 ## 🪛 Fungsi di dalam Aplikasi
@@ -44,8 +45,8 @@
   <li><strong>main_menu()</strong>: Menampilkan menu utama untuk interaksi pengguna.</li>
 </ul>
 
-## 📦 Instalasi
-1. **Clone repository**:
-   ```bash
-   git clone <repository-url>
-   cd MySPA-CRM
+
+
+
+
+
