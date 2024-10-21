@@ -222,7 +222,7 @@ def main_menu():
                     print("======================================================")
                     print("1. Lihat Semua Data")
                     print("2. Lihat data berdasarkan ID")
-                    print("3. Lihat data berdasarkan nama")
+                    print("3. Lihat data berdasarkan Nomor Hp")
                     print("0. Kembali ke main menu")
                     pilih_submenu = input("Pilih sub menu: ")
                     if pilih_submenu == '1':
